@@ -2,6 +2,7 @@
 # Terraform has a ton of providers
 # The provider is downloaded when we run terraform init in .terraform
 provider "aws" {
+  profile = "personal-test-user"
 }
 # Providers are not free of bugs, you can raise issues at Provider page.
 
@@ -24,9 +25,13 @@ terraform {
     digitalocean = {
         source = "digitalocean/digitalocean"
         # If we don't give a source, it will try to find hashicorp/digitalocean
+        version = "~> 2.0" # ~> 2.0 means any version in the 2.X range
+        # If we don't give a version, it will use the latests (dangerous)
     }
   }
 }
+# The .terraform.lock.hcl hashes the provider and saves the version and constraints
+# If we change it later, it may lock us so we need to delete it or use "terraform init -upgrade"
 
 provider "digitalocean" {}
 
@@ -42,4 +47,7 @@ resource "aws_instance" "my_ec2_instance" {
 # terraform destroy -target "aws_instance.my_ec2_instance" -target "aws_instance.my_other_instance"
 
 # Terraform stores the state of the infrastructure (creation, destroy, update, etc.)
-
+# The file is 'terraform.state' and shouldn't be manually touched
+# It is also important to have a backup cause if it dissappears, terraform won't know the state of the resources
+# Terraform always tries to achieve to desired state (declared in the files)
+# If the state changes (e.g. manual changes on the console), Terraform will try to correct it
