@@ -21,6 +21,7 @@ provider "aws" {
 # explicit source information
 
 terraform {
+  required_version = "=1.15.x"
   required_providers {
     digitalocean = {
         source = "digitalocean/digitalocean"

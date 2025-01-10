@@ -161,3 +161,60 @@ output "ami_id" {
 # For detailed logs, use the TF_LOG environment variable
 # Levels: TRACE, DEBUG, INFO, WARN, ERROR
 # To save the logs, use TF_LOG_PATH environment variable
+
+
+# DYNAMIC BLOCKS
+
+# Dynamic blocks are used to create multiple blocks of the same type
+# They are supported inside resources, data, provider and provisioner blocks
+
+variable "http_ports" {
+  default = [80, 443, 8080, 8443]
+  type = list(number)
+}
+
+resource "aws_security_group" "dynamic_security_group" {
+  name = "firewall-dynamic"
+  description = "Dynamic Security Group"
+  dynamic "ingress" {
+    for_each = var.http_ports # We create an ingress rule for each value of the list
+    # iterator = port # We can use another name for the iterator to access the value  
+    content {
+      # from_port = port.value # This is the name if we use the iterator
+      from_port = ingress.value # This is the value of each element of the list
+      to_port = ingress.value
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+}
+
+# OTHER COMMANDS
+
+# terraform fmt -> Formats the code
+# terraform validate -> Validates the code syntatically
+# terraform show -> Shows the current state
+# terraform apply -replace="aws_instance.test_instance" -> Replaces a resource (force)
+# terraform plan -out=plan.out -> Saves the plan to a file to ensure consistency
+# terraform apply plan.out -> Applies the plan from a file
+# terraform output -> Shows the outputs
+# terraform apply -target="aws_instance.test_instance" -> Applies only the target
+
+
+# LIFECYCLE
+
+# We can use the lifecycle block to control the behavior of the resources
+
+resource "aws_instance" "lifecycle_instance" {
+  ami = "ami-123456"
+  instance_type = "t2.micro"
+  tags = {
+    "Environment" = "dev"
+  }
+  lifecycle {
+    create_before_destroy = true # This will create the new instance before destroying the old one
+    ignore_changes = [tags] # This will ignore changes on the tags
+    # ignore_changes = all # This will ignore all changes
+    prevent_destroy = true # This will prevent the destruction of the resource
+  }
+}
