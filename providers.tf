@@ -21,13 +21,13 @@ provider "aws" {
 # explicit source information
 
 terraform {
-  required_version = "=1.15.x"
+  required_version = "~> 1.9.0"
   required_providers {
     digitalocean = {
-        source = "digitalocean/digitalocean"
-        # If we don't give a source, it will try to find hashicorp/digitalocean
-        version = "~> 2.0" # ~> 2.0 means any version in the 2.X range
-        # If we don't give a version, it will use the latests (dangerous)
+      source = "digitalocean/digitalocean"
+      # If we don't give a source, it will try to find hashicorp/digitalocean
+      version = "~> 2.0" # ~> 2.0 means any version in the 2.X range
+      # If we don't give a version, it will use the latests (dangerous)
     }
   }
 }
@@ -39,8 +39,8 @@ provider "digitalocean" {}
 # Resource blocks describes one or more infrastructure objects
 # Resource blocks declares a resource type with a local name, both of them are the identifier
 resource "aws_instance" "my_ec2_instance" {
- instance_type =  "t2.micro"
- ami = "ami-0664c8f94c2a2261b"
+  instance_type = "t2.micro"
+  ami           = "ami-0664c8f94c2a2261b"
 }
 
 # You can use 'terraform destroy' to destroy ALL resources
