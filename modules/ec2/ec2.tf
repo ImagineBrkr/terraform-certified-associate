@@ -39,17 +39,3 @@ variable "instance_name" {
 output "instance_id" {
   value = aws_instance.ec2_instance.id
 }
-
-
-# WORKSPACES
-
-# We can use workspaces to have multiple environments
-# Each environment will have its own tfstate file.
-
-locals {
-    instance_types_env = {
-        "dev" = "t2.micro"
-        "prod" = "t2.large"
-        "default" = "t2.micro"
-    }
-}
