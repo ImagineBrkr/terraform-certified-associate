@@ -2,7 +2,7 @@
 
 # Reusable pieces of configuration that can be called by multiple projects
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws" # This is in the public Terraform Registry
+  source  = "terraform-aws-modules/vpc/aws" # This is in the public Terraform Registry
   version = "5.17.0"
   # We can use other sources:
   # source = "github.com/hashicorp/example" # Git
@@ -19,11 +19,11 @@ module "vpc" {
 
 # Calling a local module
 module "custom_ec2" {
-    source = "./modules/ec2"
+  source = "./modules/ec2"
 
-    instance_name = "my-ec2-instance"
-    ami_id            = "ami-0c55b159cbfafe1f0"
-    instance_type  = "t2.micro"
+  instance_name = "my-ec2-instance"
+  ami_id        = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
 }
 
 # Using the outputs of the module
@@ -37,11 +37,11 @@ output "custom_ec2_id" {
 # Each environment will have its own tfstate file.
 
 locals {
-    instance_types_env = {
-        "dev" = "t2.micro"
-        "prod" = "m5.large"
-        "default" = "t2.micro"
-    }
+  instance_types_env = {
+    "dev"     = "t2.micro"
+    "prod"    = "m5.large"
+    "default" = "t2.micro"
+  }
 }
 
 resource "aws_instance" "instance_using_workspaces" {
